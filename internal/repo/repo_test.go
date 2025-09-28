@@ -1,23 +1,22 @@
-package util
+package repo
 
 import (
+	"reflect"
+	"runtime"
 	"testing"
 )
 
-func FuzzRepoPath(f *testing.F) {
+func FuzzJoinPaths(f *testing.F) {
 	f.Add("base", "path1")
 	f.Add("", "")
 	f.Add("/", "../../etc/passwd")
 	f.Add("", "./relative/path")
 	f.Fuzz(func(t *testing.T, base string, path string) {
-		_, err := RepoPath(base, path)
-		if err != nil {
-			t.Fatalf("err %v", err)
-		}
+		joinPaths(base, path)
 	})
 }
 
-func TestRepoPathCases(t *testing.T) {
+func TestJoinPathsCases(t *testing.T) {
 	cases := []struct {
 		name     string
 		base     string
@@ -88,12 +87,10 @@ func TestRepoPathCases(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			actual, err := RepoPath(c.base, c.paths...)
-			if err != nil {
-				t.Fatalf("err %v", err)
-			}
+			actual := joinPaths(c.base, c.paths...)
 			if actual != c.expected {
-				t.Errorf("RepoPath(%v, %v) = %v; expected %v", c.base, c.paths, actual, c.expected)
+				functionName := runtime.FuncForPC(reflect.ValueOf(joinPaths).Pointer()).Name()
+				t.Errorf("%v(%v, %v) = %v; expected %v", functionName, c.base, c.paths, actual, c.expected)
 			}
 		})
 	}

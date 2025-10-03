@@ -5,10 +5,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Add = &cobra.Command{
+var AddCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add file contents to the index staged for the next commit",
-	Run: func(cmd *cobra.Command, args []string) {
-		repo.AddFile()
-	},
+	Args:  addArgs,
+	RunE:  addRunE,
+}
+
+func addArgs(cmd *cobra.Command, args []string) error {
+	return nil
+}
+
+func addRunE(cmd *cobra.Command, args []string) error {
+	return repo.AddFile()
 }

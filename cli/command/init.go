@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Init = &cobra.Command{
+var InitCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initiliaze an empty Got repository",
 	Args:  cobra.MaximumNArgs(1),

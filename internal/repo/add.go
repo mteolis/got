@@ -2,6 +2,8 @@ package repo
 
 import "fmt"
 
-func AddFile() {
+func AddFile() error {
 	fmt.Println("Added file")
+
+	return nil
 }
